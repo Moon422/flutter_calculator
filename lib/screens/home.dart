@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import '../services/calculator_service.dart';
 
 class Home extends StatefulWidget {
   final String title;
@@ -728,6 +729,7 @@ class HomeState extends State<Home> {
                       setState(() {
                         operationPanel.write(inputPanel);
                         clearInputPanel();
+                        inputPanel.write(CalculatorService.simpleCalculate(operationPanel.toString()));
                       });
                     }
                   },
