@@ -4,12 +4,9 @@ import 'dart:developer';
 
 class CalculatorParser {
   final String expression;
-  late List<int> runes;
   int lookAheadIndex = 0;
 
-  CalculatorParser({required this.expression}) {
-    runes = expression.runes.toList();
-  }
+  CalculatorParser({required this.expression});
 
   double s() {
    double x = a();
