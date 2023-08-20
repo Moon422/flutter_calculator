@@ -13,6 +13,7 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   StringBuffer operationPanel = StringBuffer("");
+  StringBuffer expression = StringBuffer("");
   StringBuffer inputPanel = StringBuffer("");
 
   bool fractionalPart = false;
@@ -33,6 +34,7 @@ class HomeState extends State<Home> {
 
   void clearOperationPanel() {
     operationPanel.clear();
+    expression.clear();
   }
 
   void clearAllPanel() {
@@ -215,6 +217,7 @@ class HomeState extends State<Home> {
                     if (inputPanel.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " ( "]);
+                        expression.writeAll([inputPanel, "("]);
                         clearInputPanel();
                       });
                     }
@@ -243,6 +246,7 @@ class HomeState extends State<Home> {
                     if (inputPanel.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " ) "]);
+                        expression.writeAll([inputPanel, ")"]);
                         clearInputPanel();
                       });
                     }
@@ -271,6 +275,7 @@ class HomeState extends State<Home> {
                     if (inputPanel.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " % "]);
+                        expression.writeAll([inputPanel, "%"]);
                         clearInputPanel();
                       });
                     }
@@ -299,6 +304,7 @@ class HomeState extends State<Home> {
                     if (inputPanel.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " * "]);
+                        expression.writeAll([inputPanel, "*"]);
                         clearInputPanel();
                       });
                     }
@@ -408,6 +414,7 @@ class HomeState extends State<Home> {
                     if (inputPanel.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " - "]);
+                        expression.writeAll([inputPanel, "-"]);
                         clearInputPanel();
                       });
                     }
@@ -517,6 +524,7 @@ class HomeState extends State<Home> {
                     if (inputPanel.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " + "]);
+                        expression.writeAll([inputPanel, "+"]);
                         clearInputPanel();
                       });
                     }
@@ -728,8 +736,10 @@ class HomeState extends State<Home> {
                     if (inputPanel.isNotEmpty) {
                       setState(() {
                         operationPanel.write(inputPanel);
+                        expression.writeAll([inputPanel, "\$"]);
                         clearInputPanel();
-                        inputPanel.write(CalculatorService.simpleCalculate(operationPanel.toString()));
+                        log(expression.toString());
+                        inputPanel.write(CalculatorService.scientificCalculate(expression.toString()));
                       });
                     }
                   },

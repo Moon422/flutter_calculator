@@ -1,98 +1,122 @@
-import 'dart:collection';
 
-import 'package:tuple/tuple.dart';
 
-class CalculatorParse {
-  static final List<String> terminals = ['id', '/', '*', '+', '-'];
-  static final List<String> nonTerminals = ['S', 'S\'', 'A', 'A\'', 'B', 'B\'', 'C', 'C\'', 'D'];
-  static final HashMap<String, HashMap<String, List<String>>> parseTable = HashMap.of({
-    "S": HashMap.of({
-      "id": ["A", "S'"],
-      "(": ["A", "S'"],
-    }),
-    "S'": HashMap.of({
-      "-": ["-", "A", "S'"],
-      ")": ["_"],
-      "\$": ["_"],
-    }),
-    "A": HashMap.of({
-      "id": ["B", "A'"],
-      "(": ["B", "A'"],
-    }),
-    "A'": HashMap.of({
-      "-": ["_"],
-      "+": ["+", "B", "A'"],
-      ")": ["_"],
-      "\$": ["_"],
-    }),
-    "B": HashMap.of({
-      "id": ["C", "B'"],
-      "(": ["C", "B'"],
-    }),
-    "B'": HashMap.of({
-      "-": ["_"],
-      "+": ["_"],
-      "*": ["*", "C", "B'"],
-      ")": ["_"],
-      "\$": ["_"],
-    }),
-    "C": HashMap.of({
-      "id": ["D", "C'"],
-      "(": ["D", "C'"],
-    }),
-    "C'": HashMap.of({
-      "-": ["_"],
-      "+": ["_"],
-      "*": ["_"],
-      "/": ["/", "D", "C'"],
-      ")": ["_"],
-      "\$": ["_"],
-    }),
-    "D": HashMap.of({
-      "id": ["id"],
-      "(": ["(", "S", ")"],
-    }),
-  });
+import 'dart:developer';
 
-  // final List<Tuple2<String, double>> expression;
+class CalculatorParser {
+  final String expression;
+  late List<int> runes;
+  int lookAheadIndex = 0;
 
-  // CalculatorParse({required this.expression});
+  CalculatorParser({required this.expression}) {
+    runes = expression.runes.toList();
+  }
 
-  static double parse({ required List<Tuple2<String, double>> expression }) {
-    double result = 0;
+  double s() {
+   double x = a();
+   double y = sPrime();
 
-    List<Tuple2<String, double>> stack = [
-      const Tuple2(
-          "\$",
-          double.nan,
-      ),
-      const Tuple2(
-          "S",
-          double.nan,
-      ),
-    ];
+   return x - y;
+  }
 
-    int lookAheadIdx = 0;
-    String stackTop = stack.removeLast().item1;
-    String lookAhead = expression[lookAheadIdx].item1;
-    double lookAheadValue = expression[lookAheadIdx].item2;
+  double sPrime() {
+    if (expression[lookAheadIndex] == "-") {
+      lookAheadIndex++;
 
-    while (stackTop != "\$" && lookAhead != "\$") {
-      if (stackTop == lookAhead) {
-        lookAheadIdx++;
-      } else {
-        var actions = parseTable[stackTop]![lookAhead]!.reversed.toList();
+      double x = a();
+      double y = sPrime();
 
-        for (int i = 0; i < actions.length; i++) {
-          stack.add(Tuple2(actions[i], lookAheadValue));
-        }
-      }
-
-      stackTop = stack.removeLast().item1;
-      lookAhead = expression[lookAheadIdx].item1;
-      lookAheadValue = expression[lookAheadIdx].item2;
+      return x - y;
     }
 
-    return result;
+    return 0;
+  }
+
+  double a() {
+    double x = b();
+    double y = aPrime();
+
+    return x + y;
+  }
+
+  double aPrime() {
+    if (expression[lookAheadIndex] == "+") {
+      lookAheadIndex++;
+
+      double x = b();
+      double y = aPrime();
+
+      return x + y;
+    }
+
+    return 0;
+  }
+
+  double b() {
+    double x = c();
+    double y = bPrime();
+
+    return x * y;
+  }
+
+  double bPrime() {
+    if (expression[lookAheadIndex] == "*") {
+      lookAheadIndex++;
+
+      double x = c();
+      double y = bPrime();
+
+      return x * y;
+    }
+
+    return 1;
+  }
+
+  double c() {
+    double x = d();
+    double y = cPrime();
+
+    return x / y;
+  }
+
+  double cPrime() {
+    if (expression[lookAheadIndex] == "/") {
+      lookAheadIndex++;
+
+      double x = d();
+      double y = cPrime();
+
+      return x / y;
+    }
+
+    return 1;
+  }
+
+  double d() {
+    if (expression[lookAheadIndex] == "(") {
+      lookAheadIndex++;
+      double x = s();
+
+      if (expression[lookAheadIndex] == ")") {
+        lookAheadIndex++;
+        return x;
+      } else {
+        throw Exception("Unbalanced brackets");
+      }
+    }
+
+    StringBuffer operand = StringBuffer("");
+
+    while (expression[lookAheadIndex] == "." || int.tryParse(expression[lookAheadIndex]) != null) {
+      operand.write(expression[lookAheadIndex]);
+      lookAheadIndex++;
+    }
+
+    log(operand.toString());
+
+    return double.parse(operand.toString());
+  }
+
+  double parse() {
+    return s();
   }
 }

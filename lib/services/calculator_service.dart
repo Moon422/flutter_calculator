@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter_calculator/services/calculator_parser.dart';
+
 class CalculatorService {
   static double calculate(double left, double right, String operator) {
     log("${left.toString()}, ${right.toString()}, ${operator}");
@@ -43,5 +45,10 @@ class CalculatorService {
     }
 
     return calculate(result, double.parse(operand.toString()), operator!);
+  }
+
+  static double scientificCalculate(String expression) {
+    CalculatorParser parser = CalculatorParser(expression: expression);
+    return parser.parse();
   }
 }
