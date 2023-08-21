@@ -69,6 +69,8 @@ class HomeState extends State<Home> {
             appbar.preferredSize.height) *
         0.11;
 
+    log(expression.toString());
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: appbar,
@@ -180,9 +182,10 @@ class HomeState extends State<Home> {
                 fit: FlexFit.tight,
                 child: GestureDetector(
                   onTap: () {
-                    if (inputPanel.isNotEmpty) {
+                    if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " / "]);
+                        expression.writeAll([inputPanel, "/"]);
                         clearInputPanel();
                       });
                     }
@@ -214,13 +217,10 @@ class HomeState extends State<Home> {
                 fit: FlexFit.tight,
                 child: GestureDetector(
                   onTap: () {
-                    if (inputPanel.isNotEmpty) {
-                      setState(() {
-                        operationPanel.writeAll([inputPanel, " ( "]);
-                        expression.writeAll([inputPanel, "("]);
-                        clearInputPanel();
-                      });
-                    }
+                    setState(() {
+                      operationPanel.writeAll([inputPanel, " ( "]);
+                      expression.writeAll([inputPanel, "("]);
+                    });
                   },
                   child: Container(
                     height: buttonHeight,
@@ -243,13 +243,14 @@ class HomeState extends State<Home> {
                 fit: FlexFit.tight,
                 child: GestureDetector(
                   onTap: () {
-                    if (inputPanel.isNotEmpty) {
-                      setState(() {
+                    setState(() {
+                      if (expression.isNotEmpty) {
                         operationPanel.writeAll([inputPanel, " ) "]);
                         expression.writeAll([inputPanel, ")"]);
-                        clearInputPanel();
-                      });
-                    }
+                      }
+
+                      clearInputPanel();
+                    });
                   },
                   child: Container(
                     height: buttonHeight,
@@ -272,7 +273,7 @@ class HomeState extends State<Home> {
                 fit: FlexFit.tight,
                 child: GestureDetector(
                   onTap: () {
-                    if (inputPanel.isNotEmpty) {
+                    if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " % "]);
                         expression.writeAll([inputPanel, "%"]);
@@ -301,7 +302,7 @@ class HomeState extends State<Home> {
                 fit: FlexFit.tight,
                 child: GestureDetector(
                   onTap: () {
-                    if (inputPanel.isNotEmpty) {
+                    if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " * "]);
                         expression.writeAll([inputPanel, "*"]);
@@ -411,7 +412,7 @@ class HomeState extends State<Home> {
                 fit: FlexFit.tight,
                 child: GestureDetector(
                   onTap: () {
-                    if (inputPanel.isNotEmpty) {
+                    if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " - "]);
                         expression.writeAll([inputPanel, "-"]);
@@ -521,7 +522,7 @@ class HomeState extends State<Home> {
                 fit: FlexFit.tight,
                 child: GestureDetector(
                   onTap: () {
-                    if (inputPanel.isNotEmpty) {
+                    if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " + "]);
                         expression.writeAll([inputPanel, "+"]);
@@ -644,7 +645,7 @@ class HomeState extends State<Home> {
                           fit: FlexFit.tight,
                           child: GestureDetector(
                             onTap: () {
-                              if (inputPanel.isNotEmpty) {
+                              if (expression.isNotEmpty) {
                                 setState(() {
                                   inputPanel.write(0);
                                 });
@@ -671,7 +672,7 @@ class HomeState extends State<Home> {
                           fit: FlexFit.tight,
                           child: GestureDetector(
                             onTap: () {
-                              if (inputPanel.isNotEmpty) {
+                              if (expression.isNotEmpty) {
                                 setState(() {
                                   inputPanel.write('00');
                                 });
@@ -700,7 +701,7 @@ class HomeState extends State<Home> {
                             onTap: () {
                               if (!fractionalPart) {
                                 fractionalPart = true;
-                                if (inputPanel.isEmpty) {
+                                if (expression.isNotEmpty) {
                                   inputPanel.write('0.');
                                 } else {
                                   inputPanel.write('.');
@@ -733,13 +734,14 @@ class HomeState extends State<Home> {
                 fit: FlexFit.tight,
                 child: GestureDetector(
                   onTap: () {
-                    if (inputPanel.isNotEmpty) {
+                    if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.write(inputPanel);
                         expression.writeAll([inputPanel, "\$"]);
                         clearInputPanel();
                         log(expression.toString());
-                        inputPanel.write(CalculatorService.scientificCalculate(expression.toString()));
+                        inputPanel.write(CalculatorService.scientificCalculate(
+                            expression.toString()));
                       });
                     }
                   },
