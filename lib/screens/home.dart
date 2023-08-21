@@ -185,7 +185,7 @@ class HomeState extends State<Home> {
                     if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " / "]);
-                        expression.writeAll([inputPanel, "/"]);
+                        expression.write("/");
                         clearInputPanel();
                       });
                     }
@@ -218,8 +218,8 @@ class HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      operationPanel.writeAll([inputPanel, " ( "]);
-                      expression.writeAll([inputPanel, "("]);
+                      operationPanel.write(" ( ");
+                      expression.write("(");
                     });
                   },
                   child: Container(
@@ -246,7 +246,7 @@ class HomeState extends State<Home> {
                     setState(() {
                       if (expression.isNotEmpty) {
                         operationPanel.writeAll([inputPanel, " ) "]);
-                        expression.writeAll([inputPanel, ")"]);
+                        expression.write(")");
                       }
 
                       clearInputPanel();
@@ -305,7 +305,7 @@ class HomeState extends State<Home> {
                     if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " * "]);
-                        expression.writeAll([inputPanel, "*"]);
+                        expression.write("*");
                         clearInputPanel();
                       });
                     }
@@ -338,6 +338,7 @@ class HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
+                      expression.write(1);
                       inputPanel.write(1);
                     });
                   },
@@ -363,6 +364,7 @@ class HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
+                      expression.write(2);
                       inputPanel.write(2);
                     });
                   },
@@ -388,6 +390,7 @@ class HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
+                      expression.write(3);
                       inputPanel.write(3);
                     });
                   },
@@ -415,7 +418,7 @@ class HomeState extends State<Home> {
                     if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " - "]);
-                        expression.writeAll([inputPanel, "-"]);
+                        expression.write('-');
                         clearInputPanel();
                       });
                     }
@@ -448,6 +451,7 @@ class HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
+                      expression.write(4);
                       inputPanel.write(4);
                     });
                   },
@@ -473,6 +477,7 @@ class HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
+                      expression.write(5);
                       inputPanel.write(5);
                     });
                   },
@@ -498,6 +503,7 @@ class HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
+                      expression.write(6);
                       inputPanel.write(6);
                     });
                   },
@@ -525,7 +531,7 @@ class HomeState extends State<Home> {
                     if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.writeAll([inputPanel, " + "]);
-                        expression.writeAll([inputPanel, "+"]);
+                        expression.write("+");
                         clearInputPanel();
                       });
                     }
@@ -566,6 +572,7 @@ class HomeState extends State<Home> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
+                                expression.write(7);
                                 inputPanel.write(7);
                               });
                             },
@@ -591,6 +598,7 @@ class HomeState extends State<Home> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
+                                expression.write(8);
                                 inputPanel.write(8);
                               });
                             },
@@ -616,6 +624,7 @@ class HomeState extends State<Home> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
+                                expression.write(9);
                                 inputPanel.write(9);
                               });
                             },
@@ -647,6 +656,7 @@ class HomeState extends State<Home> {
                             onTap: () {
                               if (expression.isNotEmpty) {
                                 setState(() {
+                                  expression.write(0);
                                   inputPanel.write(0);
                                 });
                               }
@@ -674,6 +684,7 @@ class HomeState extends State<Home> {
                             onTap: () {
                               if (expression.isNotEmpty) {
                                 setState(() {
+                                  expression.write('00');
                                   inputPanel.write('00');
                                 });
                               }
@@ -702,8 +713,10 @@ class HomeState extends State<Home> {
                               if (!fractionalPart) {
                                 fractionalPart = true;
                                 if (expression.isNotEmpty) {
+                                  expression.write('0.');
                                   inputPanel.write('0.');
                                 } else {
+                                  expression.write('.');
                                   inputPanel.write('.');
                                 }
                               }
@@ -737,7 +750,7 @@ class HomeState extends State<Home> {
                     if (expression.isNotEmpty) {
                       setState(() {
                         operationPanel.write(inputPanel);
-                        expression.writeAll([inputPanel, "\$"]);
+                        expression.write("\$");
                         clearInputPanel();
                         log(expression.toString());
                         inputPanel.write(CalculatorService.scientificCalculate(
